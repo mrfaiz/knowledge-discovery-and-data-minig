@@ -1,0 +1,31 @@
+Feature space: F = (Dom, dist), dist: Dom * Dom -> R+
+	- i.e dom(x,y)>0 (non-negativity)
+	- dist(x,y) = 0 (reflexivity)
+
+Metric Space M = {Dom, dist}
+	- M is Feature space
+		- i.e dom(x,y)>0 (non-negativity)
+		- dist(x,y) = 0 (reflexivity)
+	- dist(x,y) = 0 => x = y (strictness)
+	- For All (x,y) in Dom: dist(x,y) = dist(y,x) (symmetry)
+	- For All (x,y,z) in Dom: dist(x,z)<= dist(x,y) + dist(y,z) (triangular inequaility)
+	- If full fill all , then it is a metics
+
+Euclidean Vector space E = (Dom, dist)
+	- (Dom, dist) is a metric space
+	- Dom = R^d
+	- dist(x,y) = sqrt(sum of (xi-yi)^2 from i=1 to d) 
+	
+Normalization
+	- min-max normalization to [new_min, new_max]
+		- v_new = (v_old - min)/(max -min) * (new_max - new_min) + new_min
+		 - normalize age=30 in [0-1], when min=10,max=100. new_age=((30-10)/(100-10))*(1-0)+0=2/9
+	- z-score normalization also called zero-mean normalization
+		- v_new = (v_old - mean)/std 
+		- e.g. normalize 70,000 iff μ=50,000, σ=15,000. new_value = (70,000-50,000)/15,000=1.33
+
+Proximity Binarya attribute
+	- d(i,j) = (r+s)/q+r+s
+		- q = 1 1, r = 1 0, s = 0 1, r = 1 0, t = 0 0
+		
+For both attributes height and weight the mean is greater than the median. Both distributions are therefore positively skewed.

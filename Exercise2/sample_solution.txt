@@ -1,0 +1,185 @@
+The values in brackets denote hypothetical (support, confidence) for our examples.
+
+Online shop, e.g., Amazon example: {“Computer”} 
+→
+ {“MS office”} (50%, 80%)
+This is basically vanilla FIM/ARM. We model the shopping basket at checkout as individual transaction that contains the items that the customer bought.
+A typical association rule would make a recommendation on what to buy next.
+University Library example: {“Kumar book”} 
+→
+ {“Weka book”} (5%, 70%)
+Here a transaction could be the list of books that a customer borrowed.
+An association rule could make a recommendation on what else to read.
+Restaurant example: {“Fish”} 
+→
+ {“White Wine”, “Crème brûlée”} (20%, 90%)
+A transaction models the order of a customer, where the items could be the meals, dishes and drinks that are ordered together.
+An association rule could be a recommendation for e.g. wine or dessert.
+Twitter hashtags example: {“#football”} 
+→
+ {“#worldcup”} (5%,70%)
+A transaction could contain hashtags used in a post.
+An association rule could make a recommendation on additional hashtags to improve visibility.
+Stack overflow tags example: {“nodejs”} 
+→
+ {“javascript”} (8%,80%)
+A transaction could contain tags that mark a post.
+An association rule could make a recommendation on additional tags that are more descriptive for the post.
+
+
+
+========================2
+
+
+a) The naive approach enumerates and checks an exponential amount of itemsets. Due to the pruning with Apriori property (downward-closing property), far less itemsets need to be checked to find the frequent itemsets with the A-Priori algorithm.
+
+b) It helps to avoid the generation of duplicate candidates (Each frequent itemset is only extended with frequent items that are lexicographically larger than the items in the itemset).
+
+c) Apriori requires as many scans as the length of the largest frequent itemset + 1. One scan is required for each size 
+k
+ of the frequent itemsets. So one scan for the 
+1
+-itemsets, another scan for the 
+2
+-itemsets, etc. Finally, if the largest frequent itemset is of size 
+k
+, one additional scan is required to test if the candiates of size 
+k
++
+1
+ (which are generated from the frequent 
+k
+-itemsets) are frequent.
+
+d) A rule with high support alone does not make a good association rule. If every customer buys bread and butter in a supermarket, the presence of bread or butter does not make a good basis for a prediction because both are likely to be frequent by themselves.
+A rule with high confidence alone does not make a good rule either because it is rarely applicable and also may not be very accurate.
+If the support of the rule is very low, it is more of a corner case.
+
+
+===============================3(a)
+a) Finding all frequent itemsets using Apriori:
+
+minSupport = 30%, i.e. 4 transactions (
+12
+⋅
+0.3
+=
+3.6
+)
+
+Candidate set:
+
+A(7) B(10) C(5) D(4) E(9) F(6) G(8) H(8) I(1) K(2) L(1)
+
+Prune by minSupport:
+
+I(1) K(2) L(1)
+
+Candidate set:
+
+AB(6) AC(3) AD(2) AE(5) AF(2) AG(4) AH(5)
+
+BC(3) BD(4) BE(7) BF(4) BG(8) BH(7)
+
+CD(1) CE(5) CF(4) CG(2) CH(4)
+
+DE(1) DF(2) DG(4) DH(2)
+
+EF(5) EG(5) EH(7)
+
+FG(3) FH(4)
+
+GH(5)
+
+Prune by apriori property:
+
+BI(1) BK(2) BL(1) CL(1) DL(1) EI(1) EK(2) EL(1) FI(1) FK(1) FL(1) GI(1) GK(1) GL(1) HI(1) HK(2) HL(1) IK(1)
+
+Prune by minSupport:
+
+AC(3) AD(2) AF(2) BC(3) CD(1) CG(2) DE(1) DF(2) DH(2) FG(3)
+
+Candidate set:
+
+ABE(4) ABG(4) ABH(4) AEG(2) AEH(4) AGH(2)
+
+BDG(4) BEG(5) BEH(6) BGH(5) BEF(3) BFH(3)
+
+CEF(4) CEH(4) CFH(3)
+
+EFH(4) EGH(4)
+
+Pruned by apriori property:
+
+all length 3 itemsets with infrequent subitemsets of length 2
+
+Prune by minSupport:
+
+AEG(2) AGH(2) BEF(3) BFH(3) CFH(3)
+
+Candidate set:
+
+ABEH(3) BEGH(4)
+
+Pruned by apriori property:
+
+all length 4 itemsets with infrequent subitemsets of length 3
+
+Prune by minSupport:
+
+ABEH(3)
+
+
+=======================================================================3(b)
+
+b) Determine all strong association rules (minConfidence 60%):
+
+Strong rules:
+
+c(EGH -> B) = 1.0
+
+c(BGH -> E) = 0.8
+
+c(BEG -> H) = 0.8
+
+c(BEH -> G) = 0.67
+
+c(GH -> BE) = 0.8
+
+c(EG -> BH) = 0.8
+
+Weak rules:
+
+c(EH -> BG) = 0.57
+
+c(BH -> EG) = 0.57
+
+c(BE -> GH) = 0.57
+
+c(BG -> EH) = 0.5
+
+c(G -> BEH) = 0.5
+
+c(H -> BEG) = 0.5
+
+c(E -> BGH) = 0.44
+
+============================================================3(c)
+c) Closed Frequent itemsets: An itemset is closed if none of its frequent supersets have the same support as the itemset itself. These are:
+
+A B E F H AB AE AH BE BG BH CE EF EH ABE ABG ABH AEH BDG CEF CEH EFH BEGH
+
+The CFI can be considered a loss-less compression of all frequent itemsets, that is all frequent itemsets, including their support counta can be reconstructed from their CFIs.
+
+
+==========================================================3(d)
+d) Maximal frequent itemsets: An itemset is maximal frequent if none of its supersets are frequent. These are:
+
+ABE ABG ABH AEH BDG CEF CEH EFH BEGH
+
+The MFI can be considered a lossy compression of all frequent itemsets, that is not all support counts can be reconstructed from the MFIs.
+
+
+
+
+
